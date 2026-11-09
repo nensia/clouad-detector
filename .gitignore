@@ -1,0 +1,25 @@
+# Python environment and generated files
+.venv/
+**/.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# IDE settings
+.idea/
+
+# Old nested copy of the project
+/Облачный контроль/
+
+# Personal satellite photos, annotations, and generated reports
+/data/
+/reports/
+
+# Large generated cache; keep the trained model files below
+/models/synth_cache.npz
+
+# Local safety backups are not needed in the public repository
+/models/cloud_net_before_v2.npz
+/models/cloud_net_before_v2.json
+/models/cloud_net_before_publish.npz
+/models/cloud_net_before_publish.json

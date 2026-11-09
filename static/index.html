@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Облачный контроль</title>
+  <link rel="stylesheet" href="/static/style.css?v=8">
+</head>
+<body>
+  <!-- ============================== ШАПКА ============================== -->
+  <header class="top">
+    <div class="brand">
+      <span class="brand-logo" aria-hidden="true">
+        <svg viewBox="0 0 64 64" role="presentation">
+          <defs>
+            <linearGradient id="logo-grad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#b9fbff"/>
+              <stop offset="0.5" stop-color="#56e6ff"/>
+              <stop offset="1" stop-color="#3b82f6"/>
+            </linearGradient>
+          </defs>
+          <g fill="none" stroke="url(#logo-grad)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="rotate(-45 32 32)">
+              <rect x="25" y="26" width="14" height="12" rx="2.5"/>
+              <rect x="8" y="27.5" width="13" height="9" rx="1.5"/>
+              <rect x="43" y="27.5" width="13" height="9" rx="1.5"/>
+              <path d="M21 32h4M39 32h4"/>
+            </g>
+            <path d="M50 14a9 9 0 0 1 6 6"/>
+            <path d="M52 8a15 15 0 0 1 10 10"/>
+            <circle cx="47.5" cy="16.5" r="2.2"/>
+          </g>
+        </svg>
+      </span>
+      <div class="brand-text">
+        <h1>Облачный контроль <span class="version">v2.0</span></h1>
+        <p>Отсев облачных спутниковых снимков</p>
+      </div>
+    </div>
+
+    <nav class="tabs" role="tablist" aria-label="Разделы">
+      <button id="tab-process" class="tab is-active" role="tab" aria-selected="true" aria-controls="panel-process">Обработка</button>
+      <button id="tab-label" class="tab" role="tab" aria-selected="false" aria-controls="panel-label">Разметка и дообучение</button>
+    </nav>
+
+    <button id="theme-toggle" class="theme-switch" type="button" aria-label="Сменить тему" aria-pressed="true">
+      <span class="theme-icon" id="theme-icon" aria-hidden="true">☾</span>
+      <span class="theme-track" aria-hidden="true"><span class="theme-knob"></span></span>
+    </button>
+
+    <div class="model-box">
+      <p class="model-pill" id="model-pill" role="status">
+        <span class="dot" aria-hidden="true"></span>
+        <span id="model-pill-text">Проверяю модель…</span>
+      </p>
+      <p class="model-note" id="model-note"></p>
+    </div>
+  </header>
+
+  <!-- ============================== ОБРАБОТКА ============================== -->
+  <main id="panel-process" class="layout process-layout" role="tabpanel" aria-labelledby="tab-process">
+    <section class="workbench" aria-label="Настройки обработки">
+
+      <!-- 1. Зона загрузки -->
+      <div class="hero-upload">
+        <span class="step-badge" aria-hidden="true">1</span>
+        <label class="drop drop-large" id="drop">
+          <input type="file" id="files" multiple accept=".jpg,.jpeg,.png,.tif,.tiff,.bmp,.webp">
+          <svg class="orbit-art" viewBox="0 0 900 400" preserveAspectRatio="none" aria-hidden="true">
+            <defs>
+              <linearGradient id="ring-grad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#b9fbff" stop-opacity="0.9"/>
+                <stop offset="0.45" stop-color="#3b82f6" stop-opacity="0.35"/>
+                <stop offset="1" stop-color="#8b5cf6" stop-opacity="0.35"/>
+              </linearGradient>
+              <linearGradient id="sweep-grad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="#56e6ff" stop-opacity="0"/>
+                <stop offset="0.45" stop-color="#c8fdff" stop-opacity="0.95"/>
+                <stop offset="1" stop-color="#56e6ff" stop-opacity="0"/>
+              </linearGradient>
+              <radialGradient id="halo-grad">
+                <stop offset="0.55" stop-color="#22d3ee" stop-opacity="0"/>
+                <stop offset="0.82" stop-color="#22d3ee" stop-opacity="0.14"/>
+                <stop offset="1" stop-color="#22d3ee" stop-opacity="0"/>
+              </radialGradient>
+              <filter id="sweep-glow" x="-20%" y="-60%" width="140%" height="220%">
+                <feGaussianBlur stdDeviation="3.5" result="blur"/>
+                <feMerge>
+                  <feMergeNode in="blur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+            </defs>
+            <ellipse cx="450" cy="200" rx="440" ry="192" fill="url(#halo-grad)"/>
+            <ellipse cx="450" cy="200" rx="432" ry="187" fill="none" stroke="url(#ring-grad)" stroke-width="1.6"/>
+            <ellipse cx="450" cy="200" rx="394" ry="168" fill="none" stroke="url(#ring-grad)" stroke-width="1" opacity="0.55" stroke-dasharray="2 9"/>
+            <ellipse cx="450" cy="200" rx="330" ry="140" fill="none" stroke="#3b82f6" stroke-width="1" opacity="0.28"/>
+            <ellipse cx="450" cy="200" rx="244" ry="102" fill="none" stroke="#22d3ee" stroke-width="0.9" opacity="0.22" stroke-dasharray="1 11"/>
+            <ellipse cx="450" cy="200" rx="76" ry="187" fill="none" stroke="#56e6ff" stroke-width="0.8" opacity="0.14"/>
+            <ellipse cx="450" cy="200" rx="160" ry="187" fill="none" stroke="#56e6ff" stroke-width="0.8" opacity="0.14"/>
+            <ellipse cx="450" cy="200" rx="300" ry="187" fill="none" stroke="#56e6ff" stroke-width="0.8" opacity="0.12"/>
+            <path d="M 18 200 A 432 187 0 0 1 450 13" fill="none" stroke="url(#sweep-grad)" stroke-width="5" filter="url(#sweep-glow)"/>
+            <path d="M 882 200 A 432 187 0 0 1 700 32" fill="none" stroke="url(#sweep-grad)" stroke-width="3" opacity="0.65" filter="url(#sweep-glow)"/>
+            <g fill="#b9fbff">
+              <circle cx="152" cy="74" r="1.6" opacity="0.8"/>
+              <circle cx="738" cy="92" r="1.3" opacity="0.6"/>
+              <circle cx="286" cy="330" r="1.2" opacity="0.5"/>
+              <circle cx="642" cy="322" r="1.6" opacity="0.7"/>
+              <circle cx="90" cy="248" r="1.1" opacity="0.5"/>
+              <circle cx="812" cy="268" r="1.2" opacity="0.55"/>
+            </g>
+          </svg>
+          <span class="planet" aria-hidden="true"></span>
+          <span class="drop-content">
+            <span class="drop-title">Перетащите спутниковые снимки сюда</span>
+            <span class="drop-hint">или выберите файлы на диске</span>
+            <span class="picked" id="picked">Файлы не выбраны</span>
+          </span>
+        </label>
+      </div>
+
+      <!-- 2 и 3. Настройки -->
+      <div class="settings-row">
+        <section class="setting-card" aria-labelledby="threshold-title">
+          <div class="card-head">
+            <h2 id="threshold-title">Порог отсева</h2>
+            <span class="step-badge" aria-hidden="true">2</span>
+          </div>
+          <div class="gauge">
+            <svg viewBox="0 0 140 140" aria-hidden="true">
+              <defs>
+                <linearGradient id="gauge-grad" x1="0" y1="1" x2="1" y2="0">
+                  <stop offset="0" stop-color="#3b82f6"/>
+                  <stop offset="0.55" stop-color="#56e6ff"/>
+                  <stop offset="1" stop-color="#b9fbff"/>
+                </linearGradient>
+              </defs>
+              <circle class="gauge-track" cx="70" cy="70" r="54" pathLength="100"/>
+              <circle class="gauge-arc" id="gauge-arc" cx="70" cy="70" r="54" pathLength="100"
+                      stroke-dasharray="56.25 100"/>
+            </svg>
+            <div class="gauge-center">
+              <output id="threshold-value" for="threshold">75 %</output>
+              <span class="gauge-label">облачность</span>
+            </div>
+          </div>
+          <input type="range" id="threshold" min="0" max="100" step="1" value="75" aria-describedby="threshold-help">
+          <p class="threshold-note" id="threshold-caption">Удалить, если облачность &gt; 75 %</p>
+          <p class="help" id="threshold-help">Снимок удаляется, если облака закрывают больше этой доли кадра. В задании кейса — 75 %.</p>
+        </section>
+
+        <section class="setting-card" aria-labelledby="mode-title">
+          <div class="card-head">
+            <h2 id="mode-title">Действие с облачными кадрами</h2>
+            <span class="step-badge" aria-hidden="true">3</span>
+          </div>
+          <div class="choices-group">
+            <label class="switch-choice">
+              <input type="radio" name="delete-mode" value="permanent" checked>
+              <span class="switch" aria-hidden="true"><span class="switch-knob"></span></span>
+              <span class="switch-text"><b>Уничтожить насовсем (для кейса)</b><small>Вернуть файл будет нельзя.</small></span>
+            </label>
+            <label class="switch-choice trash">
+              <input type="radio" name="delete-mode" value="trash">
+              <span class="switch" aria-hidden="true"><span class="switch-knob"></span></span>
+              <span class="switch-text"><b>Переместить в корзину (data/trash)</b><small>Удобно, пока вы проверяете сеть.</small></span>
+            </label>
+          </div>
+          <p class="help">Так требует кейс: облачные кадры уходят из выборки, ясные — остаются.</p>
+        </section>
+      </div>
+
+      <!-- 4. Запуск -->
+      <div class="center-action">
+        <span class="step-badge" aria-hidden="true">4</span>
+        <button class="primary btn-large cta" id="run" disabled>
+          <span class="spinner" id="run-spinner" hidden></span>
+          <span class="cta-label" id="run-text">Обработать снимки</span>
+        </button>
+
+        <div class="folder-box" id="folder-box" hidden>
+          <p id="folder-text"></p>
+          <button class="secondary" id="run-folder">Обработать папку</button>
+        </div>
+        <p class="status" id="status" role="status" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <!-- Результаты -->
+    <section class="results side-results" aria-label="Результаты">
+      <div class="panel-head">
+        <h2>Результаты</h2>
+        <span class="panel-count" id="results-count">0 снимков</span>
+      </div>
+      <div class="results-body" id="results-body">
+        <div class="empty" id="empty">
+          <span class="empty-glyph" aria-hidden="true">☁</span>
+          <h2>Результатов пока нет</h2>
+          <p>Выберите снимки выше и нажмите «Обработать снимки». Для каждого снимка нейросеть посчитает процент облачности и решит: сохранить или удалить.</p>
+          <p>Учебные снимки для пробы создаёт команда <code>python tools/make_samples.py</code> — они появятся в папке <code>data/incoming</code>.</p>
+        </div>
+
+        <div id="report" hidden>
+          <div class="summary" id="summary"></div>
+
+          <div class="message-head">
+            <h2>Сообщение оператору</h2>
+            <div class="message-actions">
+              <button class="secondary small" id="copy-message">Скопировать</button>
+              <a class="secondary small" id="download-txt" href="#">Скачать .txt</a>
+              <a class="secondary small" id="download-csv" href="#">Таблица .csv</a>
+            </div>
+          </div>
+          <pre class="message" id="message" tabindex="0"></pre>
+
+          <div class="rows-head">
+            <h2>Снимки</h2>
+            <p class="help">Слева исходный снимок, справа снимок с найденными облаками. Отметка на шкале — выбранный порог отсева.</p>
+          </div>
+          <ol class="rows" id="rows"></ol>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============================== РАЗМЕТКА ============================== -->
+  <main id="panel-label" class="layout label-layout" role="tabpanel" aria-labelledby="tab-label" hidden>
+    <aside class="side-panel" aria-label="Снимки и обучение">
+      <section class="card-block">
+        <div class="card-head">
+          <h2>Настоящие снимки</h2>
+          <span class="panel-count" id="image-count">0</span>
+        </div>
+        <p class="help">Положите снимки Спутникса в папку <code>data/real</code> или добавьте их здесь. Потом покажите сети, где на них облака, а где нет.</p>
+        <label class="secondary file-button">Добавить снимки
+          <input type="file" id="real-files" multiple accept=".jpg,.jpeg,.png,.tif,.tiff,.bmp,.webp">
+        </label>
+        <ul class="image-list" id="image-list"></ul>
+      </section>
+
+      <section class="card-block">
+        <div class="card-head">
+          <h2>Дообучение</h2>
+        </div>
+        <p class="help">Сеть заново подберёт веса: учебные снимки плюс все ваши мазки. Обычно это одна-две минуты.</p>
+        <div class="train-actions">
+          <button class="primary" id="train">Дообучить сеть</button>
+          <button class="secondary" id="reset-model">Вернуть базовую модель</button>
+          <button class="secondary" id="train-unet" title="Более мощная модель (U-Net). Обучается 10–15 минут. Принимается, только если на отложенных снимках лучше текущей.">Обучить U-Net (долго)</button>
+        </div>
+        <pre class="train-log" id="train-log" hidden></pre>
+      </section>
+    </aside>
+
+    <section class="results work-panel" aria-label="Холст разметки">
+      <div class="empty" id="label-empty">
+        <span class="empty-glyph" aria-hidden="true">✎</span>
+        <h2>Выберите снимок слева</h2>
+        <p>Разметка мазками: не нужно обводить каждое облако. Достаточно провести кистью по нескольким облакам и по нескольким местам без облаков — особенно там, где сеть ошибается.</p>
+      </div>
+      <div id="label-work" hidden>
+        <div class="toolbar" role="toolbar" aria-label="Инструменты разметки">
+          <div class="tool-group" role="radiogroup" aria-label="Кисть">
+            <button class="tool is-active" data-tool="cloud" role="radio" aria-checked="true"><i class="swatch cloud"></i>Облако</button>
+            <button class="tool" data-tool="clear" role="radio" aria-checked="false"><i class="swatch clear"></i>Не облако</button>
+            <button class="tool" data-tool="erase" role="radio" aria-checked="false"><i class="swatch erase"></i>Ластик</button>
+          </div>
+          <label class="size">Размер кисти <input type="range" id="brush" min="2" max="40" value="14"></label>
+          <label class="size" title="Прозрачность красных и синих маркеров поверх снимка">
+            Прозрачность <input type="range" id="label-opacity" min="0" max="100" value="45" aria-label="Прозрачность маркеров от 0 до 100 процентов">
+            <output id="label-opacity-value" for="label-opacity">45%</output>
+          </label>
+          <label class="check" title="Обведите контур. Если не доведёте его до начала, концы автоматически соединятся прямой линией и внутренняя область заполнится.">
+            <input type="checkbox" id="fill-mode"> Заливка области
+          </label>
+          <label class="check" title="Щёлкните по облаку — сеть сама найдёт его границы и закрасит выбранным цветом.">
+            <input type="checkbox" id="smart-fill"> Умная заливка (ИИ)
+          </label>
+          <label class="check" title="Обведите участок мышью или пальцем. Контур замкнётся автоматически, а ИИ выделит внутри только облака красным.">
+            <input type="checkbox" id="cloud-only-fill"> ИИ: только облака
+          </label>
+          <label class="size" title="Низкое значение строже останавливает заливку на перепадах цвета и яркости. Высокое значение лучше проходит через плавные переходы.">
+            Допуск границ <input type="range" id="smart-tolerance" min="8" max="45" value="24" aria-label="Допуск цвета и яркости">
+            <output id="smart-tolerance-value" for="smart-tolerance">24%</output>
+          </label>
+          <label class="check"><input type="checkbox" id="show-prediction"> Показать, что видит сеть</label>
+          <button class="secondary small" id="transfer-clouds" type="button" title="Перенести на холст только распознанные сетью облака красным. Можно отменить Ctrl+Z.">Перенести облака сети</button>
+          <button class="bulk-fill" id="fill-all-blue" type="button" title="Закрасить весь снимок синим, сохранив красные мазки">Закрасить всё синим</button>
+          <button class="bulk-erase" id="erase-all" type="button" title="Стереть все маркеры на этом снимке">Стереть всё</button>
+          <button class="primary small" id="save-label">Сохранить разметку</button>
+        </div>
+        <p class="help" id="undo-hint">Ctrl+Z — отменить, Ctrl+X — вернуть. У края холста указатель удерживается внутри изображения. «Заливка области»: обведите контур; незамкнутый контур соединится прямой линией. «ИИ: только облака»: обведите участок — внутри контура ИИ выделит красным только распознанные облака. Красная заливка может заменить синие метки; существующие красные сохраняются, синяя заливка не проходит через красные.</p>
+        <p class="status" id="label-status" role="status" aria-live="polite"></p>
+        <div class="stage" id="stage">
+          <canvas id="canvas-image"></canvas>
+          <img id="prediction" alt="" hidden>
+          <canvas id="canvas-label" aria-label="Холст для мазков разметки"></canvas>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="/static/app.js?v=19"></script>
+</body>
+</html>
